@@ -234,7 +234,8 @@
             'emoticons': true,
             'call': false,
             'clear': true,
-            'toggle_participants': true
+            'toggle_participants': true,
+            'blockusermsg':true
         };
         this.xhr_custom_status = false;
         this.xhr_custom_status_url = '';
@@ -286,7 +287,7 @@
             _.extend(
                 this.visible_toolbar_buttons,
                 _.pick(settings.visible_toolbar_buttons, [
-                    'emoticons', 'call', 'clear', 'toggle_participants'
+                    'emoticons', 'call', 'clear', 'toggle_participants','blockusermsg'
                 ]
             ));
         }
@@ -339,6 +340,7 @@
         HEADER_WEIGHTS[HEADER_UNGROUPED]           = 1;
         HEADER_WEIGHTS[HEADER_REQUESTING_CONTACTS] = 2;
         HEADER_WEIGHTS[HEADER_PENDING_CONTACTS]    = 3;
+        var BlockedUsers = [];
 
         // Module-level variables
         // ----------------------
@@ -476,6 +478,18 @@
                 }
             }
         };
+        
+        this.getBlockList = function(){
+            console.log('before getBlockList');
+            var iq = $iq({type:'get'}).c('blocklist',{xmlns:'urn:xmpp:blocking'});
+            converse.connection.sendIQ(iq, function(iqResult){
+                console.log('getBlockList' + iqResult);
+                $(iqResult).find('item').each(function(){
+                   var jid = $(this).attr('jid');
+                   BlockedUsers.push(jid);
+                });
+            });
+        }
 
         this.applyHeightResistance = function (height) {
             /* This method applies some resistance/gravity around the
@@ -676,6 +690,7 @@
                 }
             }, this));
             converse.emit('ready');
+            this.getBlockList();
         };
 
         // Backbone Models and Views
@@ -983,7 +998,8 @@
                 'click .end-otr': 'endOTR',
                 'click .auth-otr': 'authOTR',
                 'click .toggle-call': 'toggleCall',
-                'mousedown .dragresize-tm': 'onDragResizeStart'
+                'mousedown .dragresize-tm': 'onDragResizeStart',
+                'click .block-user-msg':'onBlockUserMsg'
             },
 
             initialize: function (){
@@ -1241,6 +1257,31 @@
                 this.height = this.$el.children('.box-flyout').height();
                 converse.resized_chatbox = this;
                 this.prev_pageY = ev.pageY;
+            },
+            onBlockUserMsg: function(ev){
+                //alert('hi');
+                var from = converse.connection.jid;
+                var to = this.model.get('jid');
+                var ind = BlockedUsers.indexOf(to)
+                if(ind > -1){
+                     var iq= $iq({type:'set',from:from}).c('unblock',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
+                    converse.connection.sendIQ(iq, function(iqResult){
+                        if('result' == $(iqResult).attr('type')){
+                            console.log('unblock BlockedUsers: ' + BlockedUsers.length);
+                            BlockedUsers.splice(ind,1);
+                        }
+                    });
+                } else {
+                    var iq= $iq({type:'set',from:from}).c('block',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
+                    converse.connection.sendIQ(iq, function(iqResult){
+                         console.log('block BlockedUsers: ' + BlockedUsers.length);
+                            
+                        if('result' == $(iqResult).attr('type')){
+                            BlockedUsers.push(to);
+                        }
+                    });
+            }
+                
             },
 
             setChatBoxHeight: function (height) {
@@ -1507,7 +1548,8 @@
                                 show_call_button: converse.visible_toolbar_buttons.call,
                                 show_clear_button: converse.visible_toolbar_buttons.clear,
                                 show_emoticons: converse.visible_toolbar_buttons.emoticons,
-                                show_participants_toggle: this.is_chatroom && converse.visible_toolbar_buttons.toggle_participants
+                                show_participants_toggle: this.is_chatroom && converse.visible_toolbar_buttons.toggle_participants,
+                                show_block_button: converse.visible_toolbar_buttons.blockusermsg
                             })
                         )
                     );
