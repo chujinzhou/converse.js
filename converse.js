@@ -489,7 +489,19 @@
                    BlockedUsers.push(jid);
                 });
             });
-        }
+        },
+                this.getVCardIcon = function(){
+                var jid = converse.connection.jid;
+                var vcardIq= $iq({type:'get',from:jid}).c('vCard',{xmlns:'vcard-temp'});
+                converse.connection.sendIQ(vcardIq, function(iqResult){
+                        var vphoto = $(iqResult).find('PHOTO');
+                        var vtype = vphoto.find('TYPE').text();
+                        var vbase64 = vphoto.find('BINVAL').text();
+                        console.log(vtype+';base64,' + vbase64);
+                        $('#chatUserAvatar').attr('src','data:'+vtype+';base64,' + vbase64);
+                    });
+
+            },
 
         this.applyHeightResistance = function (height) {
             /* This method applies some resistance/gravity around the
@@ -691,6 +703,7 @@
             }, this));
             converse.emit('ready');
             this.getBlockList();
+            this.getVCardIcon();
         };
 
         // Backbone Models and Views
@@ -1498,6 +1511,7 @@
                     );
                 }
             },
+            
 
             informOTRChange: function () {
                 var data = this.model.toJSON();
