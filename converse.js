@@ -479,29 +479,43 @@
             }
         };
         
-        this.getBlockList = function(){
+        this.getBlockList = function() {
             console.log('before getBlockList');
-            var iq = $iq({type:'get'}).c('blocklist',{xmlns:'urn:xmpp:blocking'});
-            converse.connection.sendIQ(iq, function(iqResult){
+            var iq = $iq({type: 'get'}).c('blocklist', {xmlns: 'urn:xmpp:blocking'});
+            converse.connection.sendIQ(iq, function(iqResult) {
                 console.log('getBlockList' + iqResult);
-                $(iqResult).find('item').each(function(){
-                   var jid = $(this).attr('jid');
-                   BlockedUsers.push(jid);
+                $(iqResult).find('item').each(function() {
+                    var jid = $(this).attr('jid');
+                    BlockedUsers.push(jid);
                 });
             });
         },
-                this.getVCardIcon = function(){
-                var jid = converse.connection.jid;
-                var vcardIq= $iq({type:'get',from:jid}).c('vCard',{xmlns:'vcard-temp'});
-                converse.connection.sendIQ(vcardIq, function(iqResult){
+                
+                this.getVCardIcon = function() {
+                    var jid = converse.connection.jid;
+                    var vcardIq = $iq({type: 'get', from: jid}).c('vCard', {xmlns: 'vcard-temp'});
+                    converse.connection.sendIQ(vcardIq, function(iqResult) {
                         var vphoto = $(iqResult).find('PHOTO');
                         var vtype = vphoto.find('TYPE').text();
                         var vbase64 = vphoto.find('BINVAL').text();
-                        console.log(vtype+';base64,' + vbase64);
-                        $('#chatUserAvatar').attr('src','data:'+vtype+';base64,' + vbase64);
+                        console.log(vtype + ';base64,' + vbase64);
+                        $('#chatUserAvatar').attr('src', 'data:' + vtype + ';base64,' + vbase64);
                     });
 
-            },
+                },
+                        
+                        this.updateVCardIcon = function(imgType, imgBase64){
+                            var jid = converse.connection.jid;
+                            var vcardIq = $iq({type:'set'}).c('vCard', {xmlns:'vcard-temp'}).c('JABBERID').t(jid).up().c('PHOTO').c('TYPE').t(imgType).up().c('BINVAL').t(imgBase64);
+                            converse.connection.sendIQ(vcardIq, function(iqResult){
+                                if('result' == $(iqResult).attr('type')){
+                                    $('#chatUserAvatar').attr('src', 'data:' + imgType + ';base64,' + imgBase64);
+                                    $('#chatUserAvatar').attr('src', 'data:' + vtype + ';base64,' + vbase64);
+                                }
+                            });
+                            
+                        },
+                    
 
         this.applyHeightResistance = function (height) {
             /* This method applies some resistance/gravity around the
@@ -704,6 +718,27 @@
             converse.emit('ready');
             this.getBlockList();
             this.getVCardIcon();
+            $('#chatUserAvatar').on('click', function(){
+                $('#chatUserAvatarUpdate').trigger('click');
+            });
+            var me = this;
+            $('#chatUserAvatarUpdate').on('change', function(evt) {
+                var files = evt.target.files;
+                var file = files[0];
+
+                if (files && file) {
+                    var imgType = file.type;
+                    var reader = new FileReader();
+
+                    reader.onload = function(readerEvt) {
+                        var binaryString = readerEvt.target.result;
+                        var imgBase64= btoa(binaryString);
+                        me.updateVCardIcon(imgType, imgBase64);
+                    };
+
+                    reader.readAsBinaryString(file);
+                }
+            });
         };
 
         // Backbone Models and Views
