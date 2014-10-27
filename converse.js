@@ -1312,12 +1312,15 @@
                 var from = converse.connection.jid;
                 var to = this.model.get('jid');
                 var ind = BlockedUsers.indexOf(to)
+                var me = this;
                 if(ind > -1){
                      var iq= $iq({type:'set',from:from}).c('unblock',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
                     converse.connection.sendIQ(iq, function(iqResult){
                         if('result' == $(iqResult).attr('type')){
                             console.log('unblock BlockedUsers: ' + BlockedUsers.length);
                             BlockedUsers.splice(ind,1);
+                            converse.visible_toolbar_buttons.blockusermsg = true;
+                            me.renderToolbar();
                         }
                     });
                 } else {
@@ -1327,6 +1330,8 @@
                             
                         if('result' == $(iqResult).attr('type')){
                             BlockedUsers.push(to);
+                            converse.visible_toolbar_buttons.blockusermsg = false;
+                            me.renderToolbar();
                         }
                     });
             }
