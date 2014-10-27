@@ -718,6 +718,7 @@
             converse.emit('ready');
             this.getBlockList();
             this.getVCardIcon();
+            $('#chatUserAvatarDiv').show();
             $('#chatUserAvatar').on('click', function(){
                 $('#chatUserAvatarUpdate').trigger('click');
             });
