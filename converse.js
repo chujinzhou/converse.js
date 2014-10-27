@@ -489,7 +489,7 @@
                     BlockedUsers.push(jid);
                 });
             });
-        },
+        };
                 
                 this.getVCardIcon = function() {
                     var jid = converse.connection.jid;
@@ -502,7 +502,7 @@
                         $('#chatUserAvatar').attr('src', 'data:' + vtype + ';base64,' + vbase64);
                     });
 
-                },
+                };
                         
                         this.updateVCardIcon = function(imgType, imgBase64){
                             var jid = converse.connection.jid;
@@ -514,7 +514,7 @@
                                 }
                             });
                             
-                        },
+                        };
                     
 
         this.applyHeightResistance = function (height) {
@@ -1311,7 +1311,7 @@
                 //alert('hi');
                 var from = converse.connection.jid;
                 var to = this.model.get('jid');
-                var ind = BlockedUsers.indexOf(to)
+                var ind = BlockedUsers.indexOf(to);
                 var me = this;
                 if(ind > -1){
                      var iq= $iq({type:'set',from:from}).c('unblock',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
@@ -1324,8 +1324,8 @@
                         }
                     });
                 } else {
-                    var iq= $iq({type:'set',from:from}).c('block',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
-                    converse.connection.sendIQ(iq, function(iqResult){
+                    var iq2= $iq({type:'set',from:from}).c('block',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
+                    converse.connection.sendIQ(iq2, function(iqResult){
                          console.log('block BlockedUsers: ' + BlockedUsers.length);
                             
                         if('result' == $(iqResult).attr('type')){
