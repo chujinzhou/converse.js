@@ -774,6 +774,11 @@ __p += '\n<li class="toggle-call"><a class="icon-phone" title="' +
 ((__t = (label_start_call)) == null ? '' : __t) +
 '"></a></li>\n';
  } ;
+ __p += '\n';
+ if (show_block_button)  { ;
+__p += '\n<li class="block-user-msg"><a class="glyphicon-off" title="block message' +
+'"></a></li>\n';
+ } ;
 __p += '\n';
  if (show_participants_toggle)  { ;
 __p += '\n<li class="toggle-participants"><a class="icon-hide-users" title="' +
