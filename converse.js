@@ -480,10 +480,10 @@
         };
         
         this.getBlockList = function() {
-            console.log('before getBlockList');
+            
             var iq = $iq({type: 'get'}).c('blocklist', {xmlns: 'urn:xmpp:blocking'});
             converse.connection.sendIQ(iq, function(iqResult) {
-                console.log('getBlockList' + iqResult);
+               
                 $(iqResult).find('item').each(function() {
                     var jid = $(this).attr('jid');
                     BlockedUsers.push(jid);
@@ -498,7 +498,7 @@
                         var vphoto = $(iqResult).find('PHOTO');
                         var vtype = vphoto.find('TYPE').text();
                         var vbase64 = vphoto.find('BINVAL').text();
-                        console.log(vtype + ';base64,' + vbase64);
+                        
                         $('#chatUserAvatar').attr('src', 'data:' + vtype + ';base64,' + vbase64);
                     });
 
@@ -1317,7 +1317,7 @@
                      var iq= $iq({type:'set',from:from}).c('unblock',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
                     converse.connection.sendIQ(iq, function(iqResult){
                         if('result' == $(iqResult).attr('type')){
-                            console.log('unblock BlockedUsers: ' + BlockedUsers.length);
+                            
                             BlockedUsers.splice(ind,1);
                             converse.visible_toolbar_buttons.blockusermsg = true;
                             me.renderToolbar();
@@ -1326,7 +1326,7 @@
                 } else {
                     var iq2= $iq({type:'set',from:from}).c('block',{xmlns:'urn:xmpp:blocking'}).c('item',{jid:to});
                     converse.connection.sendIQ(iq2, function(iqResult){
-                         console.log('block BlockedUsers: ' + BlockedUsers.length);
+                         
                             
                         if('result' == $(iqResult).attr('type')){
                             BlockedUsers.push(to);
