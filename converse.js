@@ -3441,7 +3441,10 @@
                         _.extend(item.toJSON(), {
                             'desc_status': STATUSES[chat_status||'offline'],
                             'desc_chat': __('Click to chat with this contact'),
-                            'desc_remove': __('Click to remove this contact')
+                            'desc_remove': __('Click to remove this contact'),
+                            'image':item.attributes.image,
+                            'image_type': item.attributes.image_type
+                            
                         })
                     ));
                 }
