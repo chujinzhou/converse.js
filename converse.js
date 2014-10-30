@@ -3442,8 +3442,8 @@
                             'desc_status': STATUSES[chat_status||'offline'],
                             'desc_chat': __('Click to chat with this contact'),
                             'desc_remove': __('Click to remove this contact'),
-                            'image':item.attributes.image,
-                            'image_type': item.attributes.image_type
+                            'image':(item.attributes.image == ''?'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTAwcHgiIGhlaWdodD0iMTAwcHgiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik04MC4xNjEsNjAuNDQxbC0xNS42Ni03LjQ3bC02LjYyMi0zLjE1OWMyLjg5Mi0xLjgyMiw1LjI0MS00LjYzNCw2Ljc3OC04LjAyMmMxLjIyLTIuNjksMS45NDYtNS43MzQsMS45NDYtOC45OQ0KCQljMC0xLjgyNy0wLjI5LTMuNTYyLTAuNjk0LTUuMjM2QzYzLjk0LDE5LjQ1Myw1Ny42MDUsMTMuNDc3LDUwLDEzLjQ3N2MtNy40NjEsMC0xMy43MDEsNS43NjMtMTUuNzkyLDEzLjY0NQ0KCQljLTAuNDgyLDEuODA4LTAuODE1LDMuNjg4LTAuODE1LDUuNjhjMCwzLjQ1OSwwLjgwOCw2LjY4NCwyLjE4MSw5LjQ4OWMxLjU4NywzLjI1NCwzLjk0LDUuOTM3LDYuODA0LDcuNjYybC02LjM0MiwyLjk1Mw0KCQlsLTE2LjE2OCw3LjUzYy0xLjQwNCwwLjY1OC0yLjMyNywyLjI0Mi0yLjMyNyw0LjAxMXYxNS4wNjJ2Mi43MDNjMCwyLjM4MSwxLjY1OSw0LjMxMiwzLjcwOCw0LjMxMmg1Ny41MDUNCgkJYzIuMDQ4LDAsMy43MDgtMS45MywzLjcwOC00LjMxMnYtMi43MDNWNjQuNDQ2QzgyLjQ2LDYyLjY4Myw4MS41NTIsNjEuMTE0LDgwLjE2MSw2MC40NDF6Ii8+DQo8L2c+DQo8L3N2Zz4NCg==':item.attributes.image),
+                            'image_type': (item.attributes.image_type == ''?'image/svg+xml':item.attributes.image_type)
                             
                         })
                     ));
