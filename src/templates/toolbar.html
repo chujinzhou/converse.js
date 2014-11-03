@@ -16,6 +16,17 @@
             <li><a class="icon-heart" href="#" data-emoticon="<3"></a></li>
         </ul>
     </li>
+ 
+{[ } ]}
+{[ if (show_file_upload)  { ]}
+   <li title="Insert Image">
+   <form action="#" id="image_upload_frm" name="uploadfrm" method="post" enctype="multipart/form-data">
+        <input type="file" id="upload" name="upload" style="visibility: hidden; width: 1px; height: 1px" multiple />
+        <a href="#" onclick="openFileOption(this.form);">
+        <span class="icon-camera"></span>
+        </a>
+    </form>
+    </li>
 {[ } ]}
 {[ if (show_call_button)  { ]}
 <li class="toggle-call"><a class="icon-phone" title="{{label_start_call}}"></a></li>
