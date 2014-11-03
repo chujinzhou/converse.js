@@ -287,7 +287,7 @@
             _.extend(
                 this.visible_toolbar_buttons,
                 _.pick(settings.visible_toolbar_buttons, [
-                    'emoticons', 'call', 'clear', 'toggle_participants','blockusermsg'
+                    'emoticons', 'call', 'clear', 'toggle_participants','blockusermsg', 'file_upload'
                 ]
             ));
         }
@@ -1609,6 +1609,7 @@
                                 show_call_button: converse.visible_toolbar_buttons.call,
                                 show_clear_button: converse.visible_toolbar_buttons.clear,
                                 show_emoticons: converse.visible_toolbar_buttons.emoticons,
+                                show_file_upload: converse.visible_toolbar_buttons.file_upload,//phyu
                                 show_participants_toggle: this.is_chatroom && converse.visible_toolbar_buttons.toggle_participants,
                                 show_block_button: converse.visible_toolbar_buttons.blockusermsg
                             })
@@ -4654,7 +4655,7 @@
 
                 if (this.prebind) {
                     if (this.jid && this.sid && this.rid) {
-                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);
+                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);return;
                     }
                     if (!this.keepalive) {
                         throw("If you use prebind and don't use keepalive, "+
@@ -4674,6 +4675,7 @@
                         delete this.connection;
                         this.emit('noResumeableSession');
                     }
+                
                 }
             }
         };
@@ -4739,6 +4741,10 @@
         };
     };
     return {
+        'uploadFile' : function (msg){
+            console.log('add function to display message in chatbox after upload.');
+            return true;
+        },
         'getBuddy': function (jid) {
             var contact = converse.roster.get(Strophe.getBareJidFromJid(jid));
             if (contact) {
